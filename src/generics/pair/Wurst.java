@@ -6,4 +6,5 @@ package generics.pair;
  * @author Plasek Sebastian
  */
 public class Wurst {
+    asd
 }
