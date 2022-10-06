@@ -1,4 +1,4 @@
-package generics.Bottle;
+package generics.bottle;
 
 /**
  * Created: 29.09.2022 at 11:31
