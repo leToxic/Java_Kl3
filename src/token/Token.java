@@ -12,8 +12,9 @@ import java.util.*;
 public class Token {
 
     public static Collection<String> getToken(String filename) throws FileNotFoundException {
-        try(Scanner scanner = new Scanner(new File(filename))) {
+        try (Scanner scanner = new Scanner(new File(filename))) {
             scanner.useDelimiter("[\\s,\\.:;?!]+");
+
             Set<String> set = new HashSet<>();
 
             while (scanner.hasNext()) {
