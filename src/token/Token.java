@@ -12,26 +12,32 @@ import java.util.*;
 public class Token {
 
     public static Collection<String> getToken(String filename) throws FileNotFoundException {
-        Scanner sc = new Scanner(new File(filename));
-        sc.useDelimiter("[\\s,\\.:;?!]+");
-        HashSet<String> set = new HashSet<>();
+        try(Scanner scanner = new Scanner(new File(filename))) {
+            scanner.useDelimiter("[\\s,\\.:;?!]+");
+            Set<String> set = new HashSet<>();
 
-        while (sc.hasNext()) {
-            set.add(sc.next());
+            while (scanner.hasNext()) {
+                set.add(scanner.next());
+            }
+            return set;
         }
-        return set;
+    }
+
+    public static List<String> getSortedTokens(Collection<String> token1, Collection<String> token2) {
+        token1.retainAll(token2);
+
+        List<String> tokens = new LinkedList<>(token1);
+
+        Collections.sort(tokens);
+        return tokens;
     }
 
     public static void main(String[] args) {
         try {
-            Collection<String> coll1 = getToken("resources/tokens1.txt");
-            Collection<String> coll2 = getToken("resources/tokens2.txt");
-            coll1.retainAll(coll2);
+            Collection<String> token1 = getToken("resources/tokens1.txt");
+            Collection<String> token2 = getToken("resources/tokens2.txt");
 
-            List<String> list = new LinkedList<>(coll1);
-            Collections.sort(list);
-
-            System.out.println(list);
+            System.out.println(getSortedTokens(token1, token2));
         } catch (FileNotFoundException f) {
             System.out.println("File was not found. Error: (" + f + ")");
         }
