@@ -46,6 +46,6 @@ public class PairMap<K, V> implements Map<K, V> {
 
     @Override
     public int size() {
-        return list.size();a
+        return list.size();
     }
 }
