@@ -31,7 +31,7 @@ public class Pair<T, U> {
     }
 
     public Pair<U, T> flip() {
-        return new Pair<U, T>(this.content2, this.content1);
+        return new Pair<>(this.content2, this.content1);
     }
 
 }
