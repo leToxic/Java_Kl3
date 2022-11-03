@@ -12,7 +12,7 @@ import java.util.Set;
 public class UniqueCharacters {
     private static HashMap<String, Integer> map = new HashMap<>();
 
-    public static int UniqueCharacter(String toCheck) {
+    public static int getUniqueChars(String toCheck) {
 
         if (!map.containsKey(toCheck)) {
 
@@ -25,14 +25,15 @@ public class UniqueCharacters {
             map.put(toCheck, uniqueSet.size());
             return uniqueSet.size();
         }
-        System.out.println("Aus Map");
+        System.out.println("Wert aus Map: ");
         return map.get(toCheck);
     }
 
 
     public static void main(String[] args) {
-        System.out.println(UniqueCharacter("abc"));
-        System.out.println(UniqueCharacter("abc"));
+        System.out.println(getUniqueChars("abc"));
+        System.out.println(getUniqueChars("abc"));
     }
+
 }
 
