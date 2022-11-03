@@ -17,7 +17,7 @@ public class Euler539 {
         }
     }
 
-    public static int P(int n) {
+    public static int p(int n) {
         List<Integer> list = new ArrayList<>();
 
         for (int i = 1; i <= n; i++) {
@@ -33,18 +33,18 @@ public class Euler539 {
     }
 
 
-    public static int S(int n) {
+    public static int s(int n) {
         int ret = 0;
 
         for (int i = 1; i <= n; i++) {
-            ret += P(i);
+            ret += p(i);
 
         }
         return ret;
     }
 
     public static void main(String[] args) {
-        System.out.println(P(1000));
-        System.out.println(S(1000));
+        System.out.println(p(1000));
+        System.out.println(s(1000));
     }
 }

@@ -14,13 +14,16 @@ public class Student implements Comparable<Student> {
     private String ln;
     private String fn;
     private Integer mtrklNr;
-    public static Set<Student> arr = new TreeSet<>();
+    public static Set<Integer> arr = new TreeSet<>();
 
     public Student(String ln, String fn, int mtrklNr) {
-        this.ln = ln;
-        this.fn = fn;
-        this.mtrklNr = mtrklNr;
-        arr.add(this);
+        if (arr.add(mtrklNr)) {
+            this.ln = ln;
+            this.fn = fn;
+            this.mtrklNr = mtrklNr;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -52,14 +55,17 @@ public class Student implements Comparable<Student> {
     }
 
     public static void main(String[] args) {
-        Student s1 = new Student("Muster", "Thomas", 123456);
-        Student s2 = new Student("Herbert", "Franz", 111111);
-        Student s3 = new Student("Malt", "David R.", 323232);
-        new Student("", "", 111111);
+        try {
+            Student s1 = new Student("Muster", "Thomas", 123456);
+            Student s2 = new Student("Herbert", "Franz", 111111);
+            Student s3 = new Student("Malt", "David R.", 323232);
+            new Student("", "", 111111);
 
 
-        System.out.println(arr);
-
+            System.out.println(arr);
+        } catch (IllegalArgumentException i) {
+            System.out.println("Martriklnummer schon vorhanden");
+        }
     }
 
 

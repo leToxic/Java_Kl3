@@ -14,20 +14,18 @@ public class UniqueCharacters {
 
     public static int UniqueCharacter(String toCheck) {
 
+        if (!map.containsKey(toCheck)) {
 
-        if (map.get(toCheck) == null) {
-            {
-                Set<Character> uniqueSet = new HashSet<>();
+            Set<Character> uniqueSet = new HashSet<>();
 
-                for (char c : toCheck.toCharArray()) {
-                    uniqueSet.add(c);
-                }
-
-                map.put(toCheck, uniqueSet.size());
-                uniqueSet.clear();
+            for (char c : toCheck.toCharArray()) {
+                uniqueSet.add(c);
             }
-        }
 
+            map.put(toCheck, uniqueSet.size());
+            return uniqueSet.size();
+        }
+        System.out.println("Aus Map");
         return map.get(toCheck);
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Plasek Sebastian
  */
-public class PhonebookEntry implements Comparable<PhonebookEntry>{
+public class PhonebookEntry implements Comparable<PhonebookEntry> {
     private String name;
     private String number;
 
@@ -55,7 +55,7 @@ public class PhonebookEntry implements Comparable<PhonebookEntry>{
     @Override
     public int compareTo(PhonebookEntry o) {
         int compare = this.name.compareTo(o.name);
-        if(compare == 0) {
+        if (compare == 0) {
             compare = this.number.compareTo(o.number);
         }
         return compare;
@@ -69,17 +69,20 @@ public class PhonebookEntry implements Comparable<PhonebookEntry>{
 
     public static void main(String[] args) {
         List<PhonebookEntry> arr = new ArrayList<>();
+        try {
+            arr.add(new PhonebookEntry("B", "+1234"));
+            arr.add(new PhonebookEntry("A", "00123"));
+            arr.add(new PhonebookEntry("Z", "0123"));
+            arr.add(new PhonebookEntry("Asd", "1234"));
 
-        arr.add(new PhonebookEntry("B", "+1234"));
-        arr.add(new PhonebookEntry("A", "00123"));
-        arr.add(new PhonebookEntry("Z", "0123"));
+            Collections.sort(arr);
+            System.out.println(arr);
 
-        Collections.sort(arr);
-        System.out.println(arr);
-
-        Collections.reverse(arr);
-        System.out.println(arr);
-
+            Collections.reverse(arr);
+            System.out.println(arr);
+        } catch (IllegalArgumentException i) {
+            System.out.println("Nicht funktioniert");
+        }
     }
 }
 
