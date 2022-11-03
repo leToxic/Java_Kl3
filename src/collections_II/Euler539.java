@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class Euler539 {
 
-    public static void removeElem(List<Integer> list, int startingFrom) {
-        for (int i = startingFrom; i < list.size(); i++) {
+    public static void removeElem(List<Integer> list) {
+        for (int i = 0; i < list.size(); i++) {
             list.remove(i);
         }
     }
@@ -25,7 +25,7 @@ public class Euler539 {
         }
 
         while(list.size() > 1) {
-            removeElem(list,0);
+            removeElem(list);
             Collections.reverse(list);
         }
 
