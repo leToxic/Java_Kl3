@@ -31,48 +31,42 @@ public class GenericUtil {
 
     public static <T extends Comparable<T>> T maxElement(List<T> arr) {
         T compareThis = arr.get(0);
-        int index = 0;
 
         for (int i = 1; i < arr.size(); i++) {
             if (arr.get(i).compareTo(compareThis) > 0) {
                 compareThis = arr.get(i);
-                index = i;
             }
         }
-        return arr.get(index);
+        return compareThis;
     }
 
     public static <T extends Number> int countOdds(Collection<T> coll) {
         int counter = 0;
         for (T t : coll) {
-            if (t.doubleValue() % 2.0 >= 0.1) {
+            if (t.doubleValue() % 2 != 0) {
                 counter++;
             }
         }
         return counter;
-
     }
 
-    public static <T extends Comparable<T>> void swapElements(List<T> x, int index1, int index2) {
-        if (x.size() >= index1 + 1 && x.size() >= index2 + 1) {
-            if (x.get(index1).compareTo(x.get(index2)) > 0) {
-                T holding = x.get(index1);
-                x.set(index2, x.get(index1));
-                x.set(index1, holding);
-            }
-        } else {
-            throw new IndexOutOfBoundsException();
+    public static <T extends Comparable<T>> void swapElements(List<T> arr, int index1, int index2) {
+        if (arr.get(index1).compareTo(arr.get(index2)) > 0) {
+            T holding = arr.get(index1);
+            arr.set(index2, arr.get(index1));
+            arr.set(index1, holding);
         }
     }
+
 
     public static <T extends Number> List<T> makeList(Class<T> classType, int anzahl) {
         List<T> retList = new ArrayList<>();
         Random rand = new Random();
-        if (classType == Integer.class) {
+        if (classType == Integer.class || classType == Byte.class || classType == Long.class) {
             for (int i = 0; i < anzahl; i++) {
                 retList.add((T) Integer.valueOf(rand.nextInt(5, 25)));
             }
-        } else if (classType == Double.class) {
+        } else if (classType == Double.class || classType == Float.class) {
             for (int i = 0; i < anzahl; i++) {
                 retList.add((T) Double.valueOf(rand.nextDouble(50, 100)));
             }
@@ -102,6 +96,8 @@ public class GenericUtil {
         }
 
         System.out.println(getGrenzwert(list, 7));
+
+        System.out.println(countOdds(list));
     }
 
 }
