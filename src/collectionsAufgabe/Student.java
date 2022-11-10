@@ -1,6 +1,5 @@
 package collectionsAufgabe;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,12 +17,36 @@ public class Student implements Comparable<Student> {
 
     public Student(String ln, String fn, int mtrklNr) {
         if (arr.add(mtrklNr)) {
-            this.ln = ln;
-            this.fn = fn;
-            this.mtrklNr = mtrklNr;
+            setLn(ln);
+            setFn(fn);
+            setMtrklNr(mtrklNr);
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public void setFn(String fn) {
+        this.fn = fn;
+    }
+
+    public void setLn(String ln) {
+        this.ln = ln;
+    }
+
+    public void setMtrklNr(Integer mtrklNr) {
+        this.mtrklNr = mtrklNr;
+    }
+
+    public Integer getMtrklNr() {
+        return mtrklNr;
+    }
+
+    public String getFn() {
+        return fn;
+    }
+
+    public String getLn() {
+        return ln;
     }
 
     @Override
@@ -64,7 +87,7 @@ public class Student implements Comparable<Student> {
 
             System.out.println(arr);
         } catch (IllegalArgumentException i) {
-            System.out.println("Martriklnummer schon vorhanden");
+            System.out.println("Matrikelnummer schon vorhanden");
         }
     }
 

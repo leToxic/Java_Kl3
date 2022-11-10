@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Plasek Sebastian
  */
 public class UniqueCharacters {
-    private static HashMap<String, Integer> map = new HashMap<>();
+    private static final HashMap<String, Integer> map = new HashMap<>();
 
     public static int getUniqueChars(String toCheck) {
 
