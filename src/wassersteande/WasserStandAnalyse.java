@@ -79,12 +79,14 @@ public class WasserStandAnalyse {
         return LocalDateTime.parse(toParse, FORMATTER);
     }
 
+    public Map<LocalDateTime, Integer> getLevels() {
+        return levels;
+    }
 
     public static void main(String[] args) throws IOException {
-        WasserStandAnalyse ws = new WasserStandAnalyse();
-        Map<LocalDateTime, Integer> map = ws.readFromFile("resources/Datei_Wasserstand_data_25268_W_MONTH.txt");
-        LocalDateTime first = (LocalDateTime) ws.levels.keySet().toArray()[0];
-        LocalDateTime last = (LocalDateTime) ws.levels.keySet().toArray()[ws.levels.keySet().size() - 1];
+        WasserStandAnalyse ws = new WasserStandAnalyse("resources/Datei_Wasserstand_data_25268_W_MONTH.txt");
+        LocalDateTime first = (LocalDateTime) ws.getLevels().keySet().toArray()[0];
+        LocalDateTime last = (LocalDateTime) ws.getLevels().keySet().toArray()[ws.getLevels().keySet().size() - 1];
 
         System.out.println(ws.average(first, last));
         System.out.println(ws.highest(first, last).keySet().size());
