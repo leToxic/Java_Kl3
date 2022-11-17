@@ -90,7 +90,6 @@ public class WasserStandAnalyse {
 
         System.out.println(ws.average(first, last));
         System.out.println(ws.highest(first, last).keySet().size());
-        asd
 
 
     }
