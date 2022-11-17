@@ -13,7 +13,7 @@ public class IpAdresse implements Comparable<IpAdresse> {
     private String adresse;
 
     public IpAdresse(String adresse) {
-        if (adresse == null || adresse.isEmpty()) {
+        if (adresse == null || adresse.isBlank()) {
             throw new IllegalArgumentException("IP Adresse ist ungültig!");
         }
         setAdresse(adresse);
@@ -24,16 +24,13 @@ public class IpAdresse implements Comparable<IpAdresse> {
             adresse = adresse.substring(0, adresse.indexOf(":"));
         }
 
-        try {
-            String[] splittedString = adresse.split("\\.");
-            for (String s : splittedString) {
-                if (Integer.parseInt(s) < 0 || Integer.parseInt(s) > 255 || splittedString.length != 4) {
-                    throw new IllegalArgumentException("IP Adresse ist nicht gültig!");
-                }
+        String[] splittedString = adresse.split("\\.");
+        for (String s : splittedString) {
+            if (splittedString.length != 4 || Integer.parseInt(s) < 0 || Integer.parseInt(s) > 255) {
+                throw new IllegalArgumentException("IP Adresse ist nicht gültig!");
             }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Eine der IP Adresse ist nicht gültig! Datei checken!!");
         }
+
         this.adresse = adresse;
     }
 
@@ -70,6 +67,9 @@ public class IpAdresse implements Comparable<IpAdresse> {
             String[] s;
             while (scan.hasNext()) {
                 s = scan.nextLine().split(" ");
+                if (s.length != 2 || s[0].isBlank() || s[1].isBlank()) {
+                    throw new IllegalArgumentException("Ip Adressen nicht in gewünschter Form angegeben");
+                }
                 s[1] = s[1].split(":")[0];
                 IpAdresse value = new IpAdresse(s[0]);
                 IpAdresse key = new IpAdresse(s[1]);
