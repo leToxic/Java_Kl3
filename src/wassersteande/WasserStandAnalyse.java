@@ -14,8 +14,8 @@ import java.util.*;
  */
 public class WasserStandAnalyse {
     private final Map<LocalDateTime, Integer> levels;
-    private static final String pattern = "dd.MM.yyyy HH:mm";
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(pattern);
+    private static final String PATTERN = "dd.MM.yyyy HH:mm";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(PATTERN);
 
 
     public WasserStandAnalyse(String filePath) throws IOException {
