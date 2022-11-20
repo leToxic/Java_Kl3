@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+
 /**
  * Created: 17.11.2022 at 11:17
  *
@@ -34,15 +35,19 @@ public class WasserStandAnalyse {
                     map.put(dateTime, Integer.valueOf(arr[2]));
 
                 } catch (NumberFormatException | DateTimeParseException | IndexOutOfBoundsException e) {
-                    System.out.println("Fehler");
+                    System.out.println("Fehler " + e.getMessage() + " | " + e.getClass().getSimpleName());
                 }
             }
         }
         return map;
     }
 
+    public NavigableMap<LocalDateTime, Integer> retFromToMap(LocalDateTime from, LocalDateTime to) {
+        return ((NavigableMap<LocalDateTime, Integer>) this.levels).subMap(from, true, to, true);
+    }
+
     public Map<LocalDateTime, Integer> highest(LocalDateTime from, LocalDateTime to) {
-        Map<LocalDateTime, Integer> temp = ((NavigableMap<LocalDateTime, Integer>) this.levels).subMap(from, true, to, true);
+        Map<LocalDateTime, Integer> temp = retFromToMap(from, to);
         Map<LocalDateTime, Integer> ret = new TreeMap<>();
         int high = 0;
 
@@ -60,8 +65,9 @@ public class WasserStandAnalyse {
         return ret;
     }
 
+
     public double average(LocalDateTime from, LocalDateTime to) {
-        Map<LocalDateTime, Integer> temp = ((NavigableMap<LocalDateTime, Integer>) this.levels).subMap(from, true, to, true);
+        NavigableMap<LocalDateTime, Integer> temp = retFromToMap(from, to);
         Double sum = 0.0;
 
         if (temp.size() == 0) {
@@ -79,6 +85,10 @@ public class WasserStandAnalyse {
         return LocalDateTime.parse(toParse, FORMATTER);
     }
 
+    public static String parseString(LocalDateTime l) {
+        return l.toLocalDate() + ", " + l.toLocalTime();
+    }
+
     public Map<LocalDateTime, Integer> getLevels() {
         return levels;
     }
@@ -90,6 +100,10 @@ public class WasserStandAnalyse {
 
         System.out.println(ws.average(first, last));
         System.out.println(ws.highest(first, last).keySet().size());
+
+        for (LocalDateTime l : ws.getLevels().keySet()) {
+            System.out.println(parseString(l) + " | " + ws.getLevels().get(l));
+        }
 
         System.out.println("Test");
 
