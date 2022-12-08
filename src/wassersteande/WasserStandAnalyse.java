@@ -23,6 +23,10 @@ public class WasserStandAnalyse {
         this.levels = readFromFile(filePath);
     }
 
+    public WasserStandAnalyse() throws IOException {
+        this.levels = new TreeMap();
+    }
+
 
     public Map<LocalDateTime, Integer> readFromFile(String filePath) throws IOException {
         Map<LocalDateTime, Integer> map = new TreeMap<>();
@@ -35,7 +39,7 @@ public class WasserStandAnalyse {
                     map.put(dateTime, Integer.valueOf(arr[2]));
 
                 } catch (NumberFormatException | DateTimeParseException | IndexOutOfBoundsException e) {
-                    System.out.println("Fehler " + e.getMessage() + " | " + e.getClass().getSimpleName());
+                    System.out.println("Fehler: " + e.getMessage() + " | " + e.getClass().getSimpleName());
                 }
             }
         }
@@ -43,7 +47,7 @@ public class WasserStandAnalyse {
     }
 
     public NavigableMap<LocalDateTime, Integer> retFromToMap(LocalDateTime from, LocalDateTime to) {
-        return ((NavigableMap<LocalDateTime, Integer>) this.levels).subMap(from, true, to, true);
+        return ((NavigableMap<LocalDateTime, Integer>) this.getLevels()).subMap(from, true, to, true);
     }
 
     public Map<LocalDateTime, Integer> highest(LocalDateTime from, LocalDateTime to) {
@@ -104,8 +108,6 @@ public class WasserStandAnalyse {
         for (LocalDateTime l : ws.getLevels().keySet()) {
             System.out.println(parseString(l) + " | " + ws.getLevels().get(l));
         }
-
-        System.out.println("Test");
 
 
     }
