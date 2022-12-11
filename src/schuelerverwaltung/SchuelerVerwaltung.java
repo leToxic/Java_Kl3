@@ -3,13 +3,14 @@ package schuelerverwaltung;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class SchuelerVerwaltung {
 
     private Collection<Schueler> verwaltung;
 
-    public SchuelerVerwaltung(String filename) {
+    public SchuelerVerwaltung(String filename) throws FileNotFoundException {
         try (Scanner sc = new Scanner(new File(filename))) {
             this.verwaltung = new TreeSet<>();
             sc.next();
@@ -23,7 +24,7 @@ public class SchuelerVerwaltung {
         }
     }
 
-    public Set<Schueler> getSchuelerFromKlasse(String klasse) {
+    public Set<Schueler> getSchuelerFromKlase(String klasse) {
         Set<Schueler> ret = new TreeSet<>();
 
         for (Schueler schueler : this.verwaltung) {
@@ -119,6 +120,28 @@ public class SchuelerVerwaltung {
             }
         }
         return ret;
+    }
+
+    public Map<Integer, Set<String>> getGeburtstagsListe(int jahr) {
+        Map<Integer, Set<String>> ret = new TreeMap<>();
+
+        for (Schueler schueler : this.verwaltung) {
+            if(schueler.getGeboren().getYear() == jahr) {
+                if(ret.containsKey(schueler.getGeboren().getYear())) {
+                    String sb = schueler.getName() + " " + schueler.getVorname() + " " + schueler.getKlasse() + " " + schueler.getAge(LocalDate.from(LocalDateTime.now()));
+                    ret.get(schueler.getGeboren().getYear()).add(sb);
+                } else {
+                    Set<String> app = new TreeSet<>();
+                    app.add(schueler.getName() + " " + schueler.getVorname() + " " + schueler.getKlasse() + " " + schueler.getAge(LocalDate.from(LocalDateTime.now())));
+                    ret.put(schueler.getGeboren().getYear(), app);
+                }
+            }
+        }
+        return ret;
+    }
+
+    public Map<Integer, Set<String>> getGeburtstagsListe() {
+        return this.getGeburtstagsListe(LocalDate.from(LocalDate.now()).getYear());
     }
 
 

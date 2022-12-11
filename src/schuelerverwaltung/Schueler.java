@@ -19,10 +19,10 @@ public class Schueler implements Comparable<Schueler> {
     private static final List<Character> AVAILIBLE_GENDERS = new ArrayList<>(Arrays.asList('w', 'm'));
 
     public Schueler(String klasse, String name, String vorname, Character geschlecht, String geboren, String religion) {
+        setGeboren(geboren);
         setName(name);
         setVorname(vorname);
         setKlasse(klasse);
-        setGeboren(geboren);
         setGeschlecht(geschlecht);
         setReligion(religion);
     }
@@ -116,10 +116,11 @@ public class Schueler implements Comparable<Schueler> {
     }
 
     public int getAge(LocalDate date) {
-        LocalDateTime ldt = LocalDateTime.now();
-        int age = ldt.getYear() - date.getYear();
-        if(date.getMonth().getValue() >= ldt.getMonth().getValue()) {
-            if(date.getDayOfMonth() >= ldt.getDayOfMonth()) {
+        if(this.geboren.isAfter(date)) {throw new IllegalArgumentException(this.geboren.toString());}
+
+        int age = date.getYear() - this.getGeboren().getYear();
+        if(date.getMonth().getValue() >= this.getGeboren().getMonth().getValue()) {
+            if(date.getDayOfMonth() >= this.getGeboren().getDayOfMonth()) {
                 age += 1;
             }
         }
