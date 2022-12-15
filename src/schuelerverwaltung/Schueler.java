@@ -94,9 +94,9 @@ public class Schueler implements Comparable<Schueler> {
 
     }
 
-    public int getAge(LocalDate ld) {
-        if (geburtstag.isAfter(ld)) throw new IllegalArgumentException(ld.toString());
-        else return Period.between(geburtstag, ld).getYears();
+    public int getAge(LocalDate toWhenAge) {
+        if (geburtstag.isAfter(toWhenAge)) throw new IllegalArgumentException(toWhenAge.toString());
+        else return Period.between(geburtstag, toWhenAge).getYears();
     }
 
 

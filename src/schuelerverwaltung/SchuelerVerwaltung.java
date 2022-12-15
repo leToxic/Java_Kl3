@@ -7,7 +7,7 @@ import java.util.*;
 
 public class SchuelerVerwaltung {
 
-    private Set<Schueler>verwaltung;
+    private final Set<Schueler> verwaltung;
 
 
     public SchuelerVerwaltung(String filename) throws FileNotFoundException {
@@ -29,15 +29,13 @@ public class SchuelerVerwaltung {
         Set<Schueler> ret = new TreeSet<>();
 
         if (komplett) {
-            for (Schueler s : verwaltung
-            ) {
+            for (Schueler s : verwaltung) {
                 if (s.getName().equals(name)) {
                     ret.add(s);
                 }
             }
         } else {
-            for (Schueler s : verwaltung
-            ) {
+            for (Schueler s : verwaltung) {
                 if (s.getName().contains(name)) {
                     ret.add(s);
                 }
@@ -50,8 +48,7 @@ public class SchuelerVerwaltung {
     public Set<Schueler> getSchuelerFromKlasse(String klasse) {
         Set<Schueler> ret = new TreeSet<>();
 
-        for (Schueler s :
-                verwaltung) {
+        for (Schueler s : verwaltung) {
             if (s.getKlasse().equals(klasse)) {
                 ret.add(s);
             }
@@ -63,8 +60,7 @@ public class SchuelerVerwaltung {
     public Set<Schueler> getAllWith(char geschlecht) {
         Set<Schueler> ret = new TreeSet<>();
 
-        for (Schueler s : verwaltung
-        ) {
+        for (Schueler s : verwaltung) {
             if (s.getGeschlecht() == geschlecht) ret.add(s);
         }
         return ret;
@@ -74,15 +70,13 @@ public class SchuelerVerwaltung {
         Set<Schueler> ret = new TreeSet<>();
 
         if (vorNach) {
-            for (Schueler s : verwaltung
-            ) {
+            for (Schueler s : verwaltung) {
                 if (s.getGeburtstag().compareTo(datum) <= 0) {
                     ret.add(s);
                 }
             }
         } else {
-            for (Schueler s : verwaltung
-            ) {
+            for (Schueler s : verwaltung) {
                 if (s.getGeburtstag().compareTo(datum) > 0) {
                     ret.add(s);
                 }
@@ -94,13 +88,10 @@ public class SchuelerVerwaltung {
     public Map<String, Integer> getKlassenAnzahl() {
         Map<String, Integer> ret = new TreeMap<>();
         for (Schueler s : verwaltung) {
-            if (!ret.containsKey(s.getKlasse())) {
-                ret.put(s.getKlasse(), 1);
-            } else {
-                Integer anzahl = ret.get(s.getKlasse());
-                ret.put(s.getKlasse(), anzahl + 1);
+            Integer anzahl = ret.getOrDefault(s.getKlasse(), 0);
+            ret.put(s.getKlasse(), anzahl + 1);
 
-            }
+
         }
         return ret;
     }
@@ -108,16 +99,15 @@ public class SchuelerVerwaltung {
     public Map<String, Map<String, List<String>>> getReligionsZugehoerigkeit() {
         Map<String, Map<String, List<String>>> ret = new TreeMap<>();
 
-        for (Schueler s : verwaltung
-        ) {
+        for (Schueler s : verwaltung) {
             if (ret.containsKey(s.getReligion())) {
-                Map<String, List<String>> mapOfKlasseUndNamen = ret.get(s.getReligion());
-                if (mapOfKlasseUndNamen.containsKey(s.getKlasse())) {
-                    mapOfKlasseUndNamen.get(s.getKlasse()).add(s.getName());
+                Map<String, List<String>> mapOfKlasse = ret.get(s.getReligion());
+                if (mapOfKlasse.containsKey(s.getKlasse())) {
+                    mapOfKlasse.get(s.getKlasse()).add(s.getName());
                 } else {
                     List<String> listOfNames = new ArrayList<>();
                     listOfNames.add(s.getName());
-                    mapOfKlasseUndNamen.put(s.getKlasse(), listOfNames);
+                    mapOfKlasse.put(s.getKlasse(), listOfNames);
                 }
             } else {
                 Map<String, List<String>> klasseUndSchueler = new HashMap<>();
