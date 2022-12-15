@@ -1,7 +1,6 @@
 package schuelerverwaltung;
 
 import java.time.*;
-import java.util.*;
 import java.time.format.*;
 
 public class Schueler implements Comparable<Schueler> {
@@ -9,66 +8,77 @@ public class Schueler implements Comparable<Schueler> {
     private String name;
     private String vorname;
     private char geschlecht;
-    private LocalDate geboren;
+    private LocalDate geburtstag;
     private String religion;
 
-    private static final String PATTERN = "dd.MM.uuuu";
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(PATTERN);
+    static final public DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.uuuu").withResolverStyle(ResolverStyle.STRICT);
 
-    private static final List<Character> AVAILIBLE_GENDERS = new ArrayList<>(Arrays.asList('w', 'm'));
 
-    public Schueler(String klasse, String name, String vorname, Character geschlecht, String geboren, String religion) {
-        setGeboren(geboren);
+    public static Schueler makeSchueler(String input) {
+        String[] arr = input.split(";");
+        return new Schueler(arr[0], arr[1], arr[2], arr[3].charAt(0), LocalDate.parse(arr[4], DATE_TIME_FORMATTER), arr[5]);
+    }
+
+
+    public Schueler(String klasse, String name, String vorname, char geschlecht, LocalDate geburtstag, String religion) {
+        setKlasse(klasse);
         setName(name);
         setVorname(vorname);
-        setKlasse(klasse);
         setGeschlecht(geschlecht);
+        setGeburtstag(geburtstag);
         setReligion(religion);
     }
 
-    public static Schueler makeSchueler(String var) {
-        String[] arr = var.split(";");
-        return new Schueler(arr[0], arr[1], arr[2], arr[3].charAt(0), arr[4], arr[5]);
-    }
-
-    private void setGeboren(String geboren) {
-        this.geboren = LocalDate.parse(geboren, FORMATTER);
-
-    }
-
-    private void setGeschlecht(Character geschlecht) {
-        if (AVAILIBLE_GENDERS.contains(geschlecht)) {
+    public void setGeschlecht(char geschlecht) {
+        if (geschlecht == 'm' || geschlecht == 'w') {
             this.geschlecht = geschlecht;
         } else {
-            throw new IllegalArgumentException("Geschlecht falsch");
+            throw new IllegalArgumentException("Falsches Geschlecht");
         }
     }
 
-    private void setKlasse(String klasse) {
-        String[] arr = klasse.split("");
-        try {
-            int stufe = Integer.parseInt(arr[0]);
-            if (stufe < 8 && stufe > 0) {
-                this.klasse = klasse;
-            } else {
-                throw new IllegalArgumentException();
-            }
-        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Klasse falsch");
+    public void setGeburtstag(LocalDate geburtstag) {
+        if (!geburtstag.isAfter(LocalDate.now())) {
+            this.geburtstag = geburtstag;
+        } else {
+            throw new IllegalArgumentException("Schüler noch nicht geboren");
         }
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    private void setReligion(String religion) {
+    public void setKlasse(String klasse) {
+        this.klasse = klasse;
+    }
+
+    public void setReligion(String religion) {
         this.religion = religion;
     }
 
-    private void setVorname(String vorname) {
+    public void setVorname(String vorname) {
         this.vorname = vorname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Schueler schueler = (Schueler) o;
+
+        return this.hashCode() == schueler.hashCode() && this.compareTo(schueler) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = klasse.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + vorname.hashCode();
+        result = 31 * result + geburtstag.hashCode();
+        return result;
     }
 
     @Override
@@ -80,51 +90,18 @@ public class Schueler implements Comparable<Schueler> {
         if (this.name.compareTo(o.name) != 0) return this.name.compareTo(o.name);
         if (this.vorname.compareTo(o.vorname) != 0) return this.vorname.compareTo(o.vorname);
 
-        return this.geboren.compareTo(o.geboren);
-
+        return this.geburtstag.compareTo(o.geburtstag);
 
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Schueler schueler = (Schueler) o;
-
-        if (!klasse.equals(schueler.klasse)) return false;
-        if (!name.equals(schueler.name)) return false;
-        if (!vorname.equals(schueler.vorname)) return false;
-        return geboren.equals(schueler.geboren);
+    public int getAge(LocalDate ld) {
+        if (geburtstag.isAfter(ld)) throw new IllegalArgumentException(ld.toString());
+        else return Period.between(geburtstag, ld).getYears();
     }
 
-    @Override
-    public int hashCode() {
-        int result = klasse.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + vorname.hashCode();
-        result = 31 * result + geboren.hashCode();
-        return result;
-    }
 
-    public Character getGeschlecht() {
-        return geschlecht;
-    }
-
-    public LocalDate getGeboren() {
-        return geboren;
-    }
-
-    public int getAge(LocalDate date) {
-        if(this.geboren.isAfter(date)) {throw new IllegalArgumentException(this.geboren.toString());}
-
-        int age = date.getYear() - this.getGeboren().getYear();
-        if(date.getMonth().getValue() >= this.getGeboren().getMonth().getValue()) {
-            if(date.getDayOfMonth() >= this.getGeboren().getDayOfMonth()) {
-                age += 1;
-            }
-        }
-    return age;
+    public String getReligion() {
+        return religion;
     }
 
     public String getKlasse() {
@@ -135,11 +112,16 @@ public class Schueler implements Comparable<Schueler> {
         return name;
     }
 
-    public String getReligion() {
-        return religion;
-    }
-
     public String getVorname() {
         return vorname;
     }
+
+    public char getGeschlecht() {
+        return geschlecht;
+    }
+
+    public LocalDate getGeburtstag() {
+        return geburtstag;
+    }
+
 }

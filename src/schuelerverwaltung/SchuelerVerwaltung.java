@@ -3,66 +3,69 @@ package schuelerverwaltung;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class SchuelerVerwaltung {
 
-    private Collection<Schueler> verwaltung;
+    private Set<Schueler>verwaltung;
+
 
     public SchuelerVerwaltung(String filename) throws FileNotFoundException {
+        verwaltung = new TreeSet<>();
         try (Scanner sc = new Scanner(new File(filename))) {
-            this.verwaltung = new TreeSet<>();
-            sc.next();
-
-            while (sc.hasNext()) {
-                this.verwaltung.add(Schueler.makeSchueler(sc.nextLine()));
+            sc.nextLine();
+            while (sc.hasNextLine()) {
+                try {
+                    verwaltung.add(Schueler.makeSchueler(sc.nextLine()));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Fehler: " + e.getMessage());
+                }
             }
 
-        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-            System.out.println(e.getMessage());
         }
-    }
-
-    public Set<Schueler> getSchuelerFromKlase(String klasse) {
-        Set<Schueler> ret = new TreeSet<>();
-
-        for (Schueler schueler : this.verwaltung) {
-            if (schueler.getKlasse().equals(klasse)) {
-                ret.add(schueler);
-            }
-        }
-        return ret;
     }
 
     public Set<Schueler> containsName(String name, boolean komplett) {
         Set<Schueler> ret = new TreeSet<>();
 
-        for (Schueler schueler : this.verwaltung) {
-            if (komplett) {
-
-                String[] arr = schueler.getName().trim().split("-|\s");
-                for (String s : arr) {
-                    if (name.equals(s)) {
-                        ret.add(schueler);
-                    }
+        if (komplett) {
+            for (Schueler s : verwaltung
+            ) {
+                if (s.getName().equals(name)) {
+                    ret.add(s);
                 }
-            } else {
-                if (schueler.getName().equals(name)) {
-                    ret.add(schueler);
+            }
+        } else {
+            for (Schueler s : verwaltung
+            ) {
+                if (s.getName().contains(name)) {
+                    ret.add(s);
                 }
             }
         }
         return ret;
     }
 
+
+    public Set<Schueler> getSchuelerFromKlasse(String klasse) {
+        Set<Schueler> ret = new TreeSet<>();
+
+        for (Schueler s :
+                verwaltung) {
+            if (s.getKlasse().equals(klasse)) {
+                ret.add(s);
+            }
+        }
+        return ret;
+    }
+
+
     public Set<Schueler> getAllWith(char geschlecht) {
         Set<Schueler> ret = new TreeSet<>();
 
-        for (Schueler schueler : this.verwaltung) {
-            if (schueler.getGeschlecht().equals(geschlecht)) {
-                ret.add(schueler);
-            }
+        for (Schueler s : verwaltung
+        ) {
+            if (s.getGeschlecht() == geschlecht) ret.add(s);
         }
         return ret;
     }
@@ -70,14 +73,18 @@ public class SchuelerVerwaltung {
     public Set<Schueler> getGeborenBis(LocalDate datum, boolean vorNach) {
         Set<Schueler> ret = new TreeSet<>();
 
-        for (Schueler schueler : this.verwaltung) {
-            if (vorNach) {
-                if (schueler.getGeboren().isBefore(datum) || schueler.getGeboren().isEqual(datum)) {
-                    ret.add(schueler);
+        if (vorNach) {
+            for (Schueler s : verwaltung
+            ) {
+                if (s.getGeburtstag().compareTo(datum) <= 0) {
+                    ret.add(s);
                 }
-            } else {
-                if (schueler.getGeboren().isAfter(datum) || schueler.getGeboren().isEqual(datum)) {
-                    ret.add(schueler);
+            }
+        } else {
+            for (Schueler s : verwaltung
+            ) {
+                if (s.getGeburtstag().compareTo(datum) > 0) {
+                    ret.add(s);
                 }
             }
         }
@@ -86,66 +93,72 @@ public class SchuelerVerwaltung {
 
     public Map<String, Integer> getKlassenAnzahl() {
         Map<String, Integer> ret = new TreeMap<>();
-
-        for (Schueler schueler : this.verwaltung) {
-            if (ret.containsKey(schueler.getKlasse())) {
-                ret.put(schueler.getKlasse(), ret.get(schueler.getKlasse()) + 1);
+        for (Schueler s : verwaltung) {
+            if (!ret.containsKey(s.getKlasse())) {
+                ret.put(s.getKlasse(), 1);
             } else {
-                ret.put(schueler.getKlasse(), 1);
+                Integer anzahl = ret.get(s.getKlasse());
+                ret.put(s.getKlasse(), anzahl + 1);
+
             }
         }
         return ret;
     }
-
 
     public Map<String, Map<String, List<String>>> getReligionsZugehoerigkeit() {
         Map<String, Map<String, List<String>>> ret = new TreeMap<>();
 
-        for (Schueler schueler : this.verwaltung) {
-            if (ret.containsKey(schueler.getReligion())) {
-                Map<String, List<String>> innerMap = ret.get(schueler.getReligion());
-                if (innerMap.containsKey(schueler.getKlasse())) {
-                    innerMap.get(schueler.getKlasse()).add(schueler.getName());
+        for (Schueler s : verwaltung
+        ) {
+            if (ret.containsKey(s.getReligion())) {
+                Map<String, List<String>> mapOfKlasseUndNamen = ret.get(s.getReligion());
+                if (mapOfKlasseUndNamen.containsKey(s.getKlasse())) {
+                    mapOfKlasseUndNamen.get(s.getKlasse()).add(s.getName());
                 } else {
-                    List<String> app = new ArrayList<>();
-                    app.add(schueler.getName());
-                    innerMap.put(schueler.getKlasse(), app);
+                    List<String> listOfNames = new ArrayList<>();
+                    listOfNames.add(s.getName());
+                    mapOfKlasseUndNamen.put(s.getKlasse(), listOfNames);
                 }
             } else {
-                Map<String, List<String>> app = new TreeMap<>();
-                List<String> appList = new ArrayList<>();
-                appList.add(schueler.getName());
-                app.put(schueler.getKlasse(), appList);
-                ret.put(schueler.getReligion(), app);
+                Map<String, List<String>> klasseUndSchueler = new HashMap<>();
+                List<String> listOfNames = new ArrayList<>();
+                listOfNames.add(s.getName());
+                klasseUndSchueler.put(s.getKlasse(), listOfNames);
+                ret.put(s.getReligion(), klasseUndSchueler);
             }
+
         }
         return ret;
     }
 
-    public Map<Integer, Set<String>> getGeburtstagsListe(int jahr) {
-        Map<Integer, Set<String>> ret = new TreeMap<>();
+    public Map<LocalDate, Set<String>> getGeburtstagsListe(int jahr) {
 
-        for (Schueler schueler : this.verwaltung) {
-            if(schueler.getGeboren().getYear() == jahr) {
-                if(ret.containsKey(schueler.getGeboren().getYear())) {
-                    String sb = schueler.getName() + " " + schueler.getVorname() + " " + schueler.getKlasse() + " " + schueler.getAge(LocalDate.from(LocalDateTime.now()));
-                    ret.get(schueler.getGeboren().getYear()).add(sb);
+        Map<LocalDate, Set<String>> ret = new TreeMap<>();
+
+        if (jahr <= 1901) return ret;
+
+        for (Schueler s : verwaltung) {
+            try {
+                LocalDate sGeburtstag = s.getGeburtstag();
+                LocalDate gebDiesesJahr = LocalDate.of(jahr, sGeburtstag.getMonth(), sGeburtstag.getDayOfMonth());
+
+                if (ret.containsKey(gebDiesesJahr)) {
+                    ret.get(gebDiesesJahr).add(s.getName() + " " + s.getVorname() + " " + s.getAge(gebDiesesJahr));
                 } else {
-                    Set<String> app = new TreeSet<>();
-                    app.add(schueler.getName() + " " + schueler.getVorname() + " " + schueler.getKlasse() + " " + schueler.getAge(LocalDate.from(LocalDateTime.now())));
-                    ret.put(schueler.getGeboren().getYear(), app);
+                    Set<String> setOfGeburtstagsSchueler = new TreeSet<>();
+                    setOfGeburtstagsSchueler.add(s.getName() + " " + s.getVorname() + " " + s.getKlasse() + " " + s.getAge(gebDiesesJahr));
+                    ret.put(gebDiesesJahr, setOfGeburtstagsSchueler);
                 }
+
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
         }
         return ret;
+
     }
 
-    public Map<Integer, Set<String>> getGeburtstagsListe() {
-        return this.getGeburtstagsListe(LocalDate.from(LocalDate.now()).getYear());
-    }
-
-
-    public Collection<Schueler> getVerwaltung() {
-        return verwaltung;
+    public Map<LocalDate, Set<String>> getGeburtstagsListe() {
+        return getGeburtstagsListe(LocalDate.now().getYear());
     }
 }

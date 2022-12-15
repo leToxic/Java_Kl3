@@ -1,14 +1,14 @@
 package schuelerverwaltung;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SchuelerVerwaltungTest {
 
@@ -16,17 +16,15 @@ public class SchuelerVerwaltungTest {
     private Schueler andrae, riegler, ines;
 
     public SchuelerVerwaltungTest() {
-        String filename = "Schueler_SortName.csv";
+        String filename = "resources/Schueler_SortName.csv";
         try {
-            verwaltung = new SchuelerVerwaltung(filename);
+            this.verwaltung = new SchuelerVerwaltung(filename);
         } catch (FileNotFoundException ex) {
             System.err.printf("File %s not found. Should be in project root directory. \n", filename);
-        } catch (IOException e) {
-            System.out.println("Error accessing file " + filename);
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         andrae = Schueler.makeSchueler("1AHIF;Andrae;Franz Eduardo;m;09.12.2001;röm.-kath.");
         riegler = Schueler.makeSchueler("1AHIF;Riegler;Marvin;m;01.09.2002;evang. A.B.");
@@ -36,15 +34,17 @@ public class SchuelerVerwaltungTest {
     @Test
     public void getSchuelerFromKlasse_klasse1AHIF_allFrom1AHIF() {
         String klasse = "1AHIF";
-        Set<Schueler> result = verwaltung.getSchuelerFromKlase(klasse);
+        Set<Schueler> result = verwaltung.getSchuelerFromKlasse(klasse);
+        // Set<Schueler> result2 = verwaltung.getSchuelerMatching(p -> p.getKlasse().equals(klasse));
         assertEquals(36, result.size());
+        // assertEquals(36, result2.size());
         assertTrue(result.contains(andrae));
         assertTrue(result.contains(riegler));
     }
 
     @Test
     public void getSchuelerFromKlasse_klasse3BHIF_allFrom3BHIF() {
-        Set<Schueler> result = verwaltung.getSchuelerFromKlase("3BHIF");
+        Set<Schueler> result = verwaltung.getSchuelerFromKlasse("3BHIF");
         assertEquals(27, result.size());
         assertTrue(result.contains(ines));
     }
