@@ -1,5 +1,7 @@
 package buchverwaltung_gitsAufgabe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -9,6 +11,26 @@ import java.util.*;
  */
 public class Buchverwaltung {
     private List<Buch> buecher;
+
+    public Buchverwaltung(String file, char trenner) {
+        try (Scanner sc = new Scanner(new File(file))) {
+            this.buecher = new ArrayList<>();
+            while (sc.hasNext()) {
+                this.buecher.add(Buch.fromCSV(sc.nextLine(), trenner));
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
+    public Buchverwaltung() {
+        this.buecher = new ArrayList<>();
+    }
+
+    public Buchverwaltung(String line) {
+        this();
+        this.buecher.add(Buch.fromCSV(line, ','));
+    }
 
     public boolean verkaufen(int id) {
         for (Buch buch : this.buecher) {
