@@ -12,15 +12,15 @@ public class SeatCalculator {
             throw new IllegalArgumentException();
         }
         this.setOfParties = new TreeSet<>();
-        for (String party : parties) {
+        for (String party : parties) {      // kann man schön auf Streams umbauen
             this.setOfParties.add(new Party(party, 0L, 0));
         }
     }
 
     public void changeSeatsOfParties(Map<String, Long> votesPerParty, Map<String, Integer> mapToChange, int availableSeats) {
-        if (votesPerParty.isEmpty() || availableSeats <= 0) {
-            throw new IllegalArgumentException();
-        }
+        //if (votesPerParty.isEmpty() || availableSeats <= 0) {     // unnötig. Frage ich in der calc func schon ab
+        //    throw new IllegalArgumentException();
+        //}
 
         int seatsUsed = 0;
         Party highestScored = this.setOfParties.first();
@@ -62,7 +62,7 @@ public class SeatCalculator {
         }
 
         Map<String, Integer> ret = new TreeMap<>();
-        this.setOfParties.forEach(p -> ret.put(p.getName(), p.getSeats()));
+        this.setOfParties.forEach(p -> ret.put(p.getName(), p.getSeats())); // Seats werden alle 0 sein
 
         // ret.keySet().stream().filter(p -> ret.get(p) <= 0).forEach(ret::remove); // Geht nicht, weil Exception: java.util.ConcurrentModificationException
 
@@ -71,7 +71,7 @@ public class SeatCalculator {
                 ret.remove(partyName);
             }
         }
-        this.changeSeatsOfParties(votesPerParty, ret, seats);
+        this.changeSeatsOfParties(votesPerParty, ret, seats); // Seats waren bis hier 0. Hier wird berechnet wie viele Sitze wer bekommt
         return ret;
     }
 }
