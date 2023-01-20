@@ -5,7 +5,7 @@ import java.util.*;
 
 public class SeatCalculator {
 
-    private final TreeSet<Party> setOfParties;
+    private final NavigableSet<Party> setOfParties;
 
     public SeatCalculator(Set<String> parties) {
         if (parties == null || parties.isEmpty()) {
@@ -30,9 +30,7 @@ public class SeatCalculator {
                 if (!(votesPerParty.containsKey(p.getName()))) {
                     throw new IllegalArgumentException();
                 }
-                if (p.getSeats() >= 1) {
-                    p.changingVotes = p.getVotes() / (p.getSeats() + 1.0);
-                }
+                p.changingVotes = p.getVotes() / (p.getSeats() + 1.0);
             });
 
             for (Party party : this.setOfParties) {
