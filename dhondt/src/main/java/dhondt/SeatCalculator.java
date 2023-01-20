@@ -18,6 +18,10 @@ public class SeatCalculator {
     }
 
     public void changeSeatsOfParties(Map<String, Long> votesPerParty, Map<String, Integer> returnMap, int seats) {
+        if (votesPerParty.isEmpty() || seats <= 0) {
+            throw new IllegalArgumentException();
+        }
+
         int seatsUsed = 0;
         Party highestScored = this.setOfParties.first();
 
@@ -54,6 +58,7 @@ public class SeatCalculator {
         if (seats <= 0 || votesPerParty.isEmpty()) {
             throw new IllegalArgumentException();
         }
+
         for (String partyName : votesPerParty.keySet()) {
             this.setOfParties.stream().filter(p -> p.getName().equals(partyName)).forEach(p -> p.setVotes(votesPerParty.get(partyName)));
         }
@@ -61,8 +66,7 @@ public class SeatCalculator {
         Map<String, Integer> ret = new TreeMap<>();
         this.setOfParties.forEach(p -> ret.put(p.getName(), p.getSeats()));
 
-        // Alle Key:Value Pairs wo Value <= 0 sollen noch aus der Map removed werden
-        // ret.keySet().stream().filter(p -> ret.get(p) <= 0).forEach(ret::add);
+        // ret.keySet().stream().filter(p -> ret.get(p) <= 0).forEach(ret::remove); // Geht nicht, weil Exception: java.util.ConcurrentModificationException
 
         for (String partyName : new TreeMap<>(ret).keySet()) {
             if (ret.get(partyName) <= 0) {
