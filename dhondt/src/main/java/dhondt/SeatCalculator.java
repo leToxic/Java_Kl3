@@ -1,10 +1,7 @@
 package dhondt;
 
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public class SeatCalculator {
 
@@ -65,7 +62,7 @@ public class SeatCalculator {
         this.setOfParties.forEach(p -> ret.put(p.getName(), p.getSeats()));
 
         // Alle Key:Value Pairs wo Value <= 0 sollen noch aus der Map removed werden
-        //ret.keySet().stream().filter(p -> ret.get(p) > 0).forEach(ret::remove);
+        // ret.keySet().stream().filter(p -> ret.get(p) <= 0).forEach(ret::add);
 
         for (String partyName : new TreeMap<>(ret).keySet()) {
             if (ret.get(partyName) <= 0) {
