@@ -17,15 +17,15 @@ public class SeatCalculator {
         }
     }
 
-    public void changeSeatsOfParties(Map<String, Long> votesPerParty, Map<String, Integer> returnMap, int seats) {
-        if (votesPerParty.isEmpty() || seats <= 0) {
+    public void changeSeatsOfParties(Map<String, Long> votesPerParty, Map<String, Integer> mapToChange, int availableSeats) {
+        if (votesPerParty.isEmpty() || availableSeats <= 0) {
             throw new IllegalArgumentException();
         }
 
         int seatsUsed = 0;
         Party highestScored = this.setOfParties.first();
 
-        while (!(seatsUsed == seats)) {
+        while (!(seatsUsed == availableSeats)) {
             this.setOfParties.forEach(p -> {
                 if (!(votesPerParty.containsKey(p.getName()))) {
                     throw new IllegalArgumentException();
@@ -42,7 +42,7 @@ public class SeatCalculator {
             }
 
             highestScored.setSeats(highestScored.getSeats() + 1);
-            returnMap.put(highestScored.getName(), highestScored.getSeats());
+            mapToChange.put(highestScored.getName(), highestScored.getSeats());
             seatsUsed++;
         }
     }
