@@ -108,11 +108,11 @@ public class Buchverwaltung {
     }
 
     public void getDiscountOnBooksOverPages(Integer pages, double rabatt) {
-        this.buecher.stream().filter(b -> b.getSeiten() < pages).forEach(b -> b.rabatt(rabatt));
+        this.buecher.stream().filter(b -> b.getSeiten() > pages).forEach(b -> b.rabatt(rabatt));
     }
 
     public void getDiscountOnBooksUnderPages(Integer pages, double rabatt) {
-        this.buecher.stream().filter(b -> b.getSeiten() > pages).forEach(b -> b.rabatt(rabatt));
+        this.buecher.stream().filter(b -> b.getSeiten() < pages).forEach(b -> b.rabatt(rabatt));
     }
 
     public void getDiscountOnBooksOfGuy(String guy, double rabatt) {

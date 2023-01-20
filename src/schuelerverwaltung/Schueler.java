@@ -3,6 +3,8 @@ package schuelerverwaltung;
 import java.time.*;
 import java.time.format.*;
 
+
+
 public class Schueler implements Comparable<Schueler> {
     private String klasse;
     private String name;
@@ -19,6 +21,7 @@ public class Schueler implements Comparable<Schueler> {
         String[] arr = input.split(";");
         return new Schueler(arr[0], arr[1], arr[2], arr[3].charAt(0), LocalDate.parse(arr[4], DATE_TIME_FORMATTER), arr[5]);
     }
+    
 
 
     public Schueler(String klasse, String name, String vorname, char geschlecht, LocalDate geburtstag, String religion) {
