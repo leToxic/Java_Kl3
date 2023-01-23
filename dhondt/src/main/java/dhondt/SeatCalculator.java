@@ -33,7 +33,7 @@ public class SeatCalculator {
                 p.changingVotes = p.getVotes() / (p.getSeats() + 1.0);
             });
 
-            for (Party party : this.setOfParties) {
+                for (Party party : this.setOfParties) {   // Kann man sich sparen weil ich die Map befülle und dann wieder leere xd
                 if (party.changingVotes >= highestScored.changingVotes) {
                     highestScored = party;
                 }
