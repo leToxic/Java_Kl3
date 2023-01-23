@@ -57,7 +57,7 @@ public class SeatCalculator {
 
         Map<String, Integer> ret = new TreeMap<>();
 
-        this.changeSeatsOfParties(votesPerParty, ret, seats); // Seats waren bis hier 0. Hier wird berechnet wie viele Sitze wer bekommt
+        this.changeSeatsOfParties(votesPerParty, ret, seats);
         return ret;
     }
 }
