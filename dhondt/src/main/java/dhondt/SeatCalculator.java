@@ -18,7 +18,7 @@ public class SeatCalculator {
     public void changeSeatsOfParties(Map<String, Long> votesPerParty, Map<String, Integer> mapToChange, int availableSeats) {
         Party highestScored = this.setOfParties.first();
 
-        for (int i = 0; !(i == availableSeats); i++) {
+        for (int seatsUsed = 0; !(seatsUsed == availableSeats); seatsUsed++) {
             this.setOfParties.forEach(p -> {
                 if (!(votesPerParty.containsKey(p.getName()))) {
                     throw new IllegalArgumentException();
