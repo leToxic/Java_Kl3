@@ -15,19 +15,15 @@ public class Numbers {
     public static List<Number> getContents(String filename) throws IOException {
         List<Number> ret = new ArrayList<>();
         try (RandomAccessFile file = new RandomAccessFile(filename, "r")) {
-            while (true) {
+            while (file.length() != file.getFilePointer()){
                 try {
-                    if (file.readBoolean()) {
-                        ret.add(file.readDouble());
-                    } else {
+                    if (file.readByte() == 0) {
                         ret.add(file.readInt());
+                    } else {
+                        ret.add(file.readDouble());
                     }
                 } catch (EOFException eof) {
-                    if (file.length() != file.getFilePointer()) {
-                        throw new IllegalArgumentException(filename);
-                    } else {
-                        break;
-                    }
+                    throw new IllegalArgumentException(filename);
                 }
             }
         }
@@ -36,8 +32,8 @@ public class Numbers {
 
     public static Map<String, Set<Number>> groupByType(List<? extends Number> numbers) {
         Map<String, Set<Number>> ret = new TreeMap<>();
-        ret.put("Double", new TreeSet<>());
-        ret.put("Integer", new TreeSet<>());
+        ret.put("Double", new HashSet<>());
+        ret.put("Integer", new HashSet<>());
         for (Number number : numbers) {
             if (number instanceof Double) {
                 ret.get("Double").add(number);
@@ -53,8 +49,10 @@ public class Numbers {
         try (RandomAccessFile file = new RandomAccessFile(filename, "rw")) {
             for (Number number : numbers) {
                 if (number instanceof Double) {
+                    file.writeByte(1);
                     file.writeDouble((Double) number);
                 } else {
+                    file.writeByte(0);
                     file.writeInt((Integer) number);
                 }
             }
