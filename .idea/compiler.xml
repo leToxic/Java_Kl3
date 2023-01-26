@@ -6,8 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="randomAccess" />
         <module name="dhondt" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="randomAccess2" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
