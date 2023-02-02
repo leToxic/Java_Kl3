@@ -15,7 +15,7 @@ public class Numbers {
     public static List<Number> getContents(String filename) throws IOException {
         List<Number> ret = new ArrayList<>();
         try (RandomAccessFile file = new RandomAccessFile(filename, "r")) {
-            while (file.length() != file.getFilePointer()){
+            while (file.length() != file.getFilePointer()) {
                 try {
                     if (file.readByte() == 0) {
                         ret.add(file.readInt());
@@ -32,16 +32,18 @@ public class Numbers {
 
     public static Map<String, Set<Number>> groupByType(List<? extends Number> numbers) {
         Map<String, Set<Number>> ret = new TreeMap<>();
-        ret.put("Double", new HashSet<>());
-        ret.put("Integer", new HashSet<>());
-        for (Number number : numbers) {
-            if (number instanceof Double) {
-                ret.get("Double").add(number);
-            } else {
-                ret.get("Integer").add(number);
-            }
-        }
+        numbers.forEach(number -> {
+            String name = number.getClass().getSimpleName();
+            Set<Number> app = ret.getOrDefault(name, new HashSet<>());
+            app.add(number);
+            ret.put(name, app);
+        });
 
+        //for (Number number : numbers) {
+        //    Set<Number> app = ret.getOrDefault(number.getClass().getSimpleName(), new HashSet<>());
+        //    app.add(number);
+        //    ret.put(number.getClass().getSimpleName(), app);
+        //}
         return ret;
     }
 
@@ -51,9 +53,11 @@ public class Numbers {
                 if (number instanceof Double) {
                     file.writeByte(1);
                     file.writeDouble((Double) number);
-                } else {
+                } else if (number instanceof Integer) {
                     file.writeByte(0);
                     file.writeInt((Integer) number);
+                } else {
+                    throw new IllegalArgumentException("Nicht verfügbarer Datentyp" + number);
                 }
             }
         }
